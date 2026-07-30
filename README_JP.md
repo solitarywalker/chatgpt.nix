@@ -9,31 +9,6 @@
 上流は snap を配布している。この flake は `v1.0.2` タグから同じソースをビルドし、
 代わりにラッパー・`.desktop` エントリ・アイコンを提供する。
 
-## lencx/ChatGPT を使わない理由
-
-[lencx/ChatGPT](https://github.com/lencx/chatgpt) の方が有名なデスクトップ
-クライアントで、このリポジトリも元々そちらをパッケージする予定だった。
-だが現行の nixpkgs ではビルドできない。
-
-あれは **Tauri 1.3** のアプリ (`wry 0.24.3`, `webkit2gtk-sys 0.18`, `soup2-sys`)
-なので webkit2gtk-4.0 / libsoup 2.4 のスタックを要求する。それが nixpkgs から
-すべて削除されている:
-
-| 属性 | 状態 |
-|---|---|
-| `webkitgtk_4_0` | 削除 — *"port to `libsoup_3` and switch to `webkitgtk_4_1`"* |
-| `libsoup_2_4` | 削除 — *"end-of-life and has many known unfixed security issues"* |
-| `cargo-tauri_1` | 削除 — *"required webkitgtk 4.0 and libsoup 2.4"* |
-
-webkit2gtk-4.1 対応は Tauri 2.x から入ったもので 1.x 系には来ていないため、
-パッチで前に進む道はない。nixpkgs 25.05 (まだ 3 つとも残っている) を pin すれば
-ビルドは通るが、それはログイン済みの ChatGPT セッションを描画させるために EOL の
-WebKit を抱え続けることを意味する。加えて上流は 2024 年 8 月からアーカイブ済みで、
-いまはリダイレクトにしかならない `https://chat.openai.com` をハードコードしたまま。
-
-こちらの上流は Electron なので以上はどれも当てはまらない。webkitgtk も libsoup も
-不要で、最初から `chatgpt.com` を指している。
-
 ## このパッケージがやること
 
 コンパイル工程は無い。`src/main.js`・`src/preload.js`・`src/config/index.js` は

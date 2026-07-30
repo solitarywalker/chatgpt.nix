@@ -9,31 +9,6 @@ A Nix flake that packages
 Upstream ships a snap. This builds the same sources from the `v1.0.2` tag and
 provides the wrapper, `.desktop` entry and icon instead.
 
-## Why not lencx/ChatGPT
-
-[lencx/ChatGPT](https://github.com/lencx/chatgpt) is the better known desktop
-client, and it is what this repository was originally going to package. It cannot
-be built on current nixpkgs.
-
-It is a **Tauri 1.3** application (`wry 0.24.3`, `webkit2gtk-sys 0.18`,
-`soup2-sys`), so it needs the webkit2gtk-4.0 / libsoup 2.4 stack. All of that has
-been removed from nixpkgs:
-
-| Attribute | Status |
-|---|---|
-| `webkitgtk_4_0` | removed — *"port to `libsoup_3` and switch to `webkitgtk_4_1`"* |
-| `libsoup_2_4` | removed — *"end-of-life and has many known unfixed security issues"* |
-| `cargo-tauri_1` | removed — *"required webkitgtk 4.0 and libsoup 2.4"* |
-
-There is no patch-forward path, because webkit2gtk-4.1 support arrived with Tauri
-2.x and never landed in the 1.x line. Pinning nixpkgs 25.05 (which still has all
-three) would work, but it means keeping an EOL WebKit around to render a logged-in
-ChatGPT session. On top of that, upstream has been archived since August 2024 and
-still hardcodes `https://chat.openai.com`, which is now only a redirect.
-
-This upstream is Electron, so none of the above applies: no webkitgtk, no libsoup,
-and it points at `chatgpt.com` directly.
-
 ## What the package does
 
 There is no compile step. `src/main.js`, `src/preload.js` and `src/config/index.js`
